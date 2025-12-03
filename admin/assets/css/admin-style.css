@@ -1,0 +1,6 @@
+.tab-btn {
+  @apply text-gray-600 hover:bg-orange-50 hover:text-orange-700 transition;
+}
+.tab-btn.active {
+  @apply bg-orange-100 text-orange-700 border-b-4 border-orange-600;
+}
