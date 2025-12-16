@@ -61,13 +61,12 @@ session_start();
   <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8">
     <div class="text-center mb-8">
       <h2 class="text-3xl font-bold text-gray-800">Selamat Datang Kembali!</h2>
-      <p class="text-gray-600 mt-2">Masuk sebagai <strong>Admin</strong> atau <strong>Pelanggan</strong></p>
     </div>
 
     <form id="loginForm" class="space-y-6">
       <div>
         <label class="block text-sm font-medium text-gray-700 mb-2">Username / Nama</label>
-        <input type="text" id="username" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500" placeholder="Contoh: admin atau budi" required>
+        <input type="text" id="username" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500" placeholder="Masukkan username" required>
       </div>
       <div>
         <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
@@ -81,13 +80,6 @@ session_start();
         <button type="submit" class="flex-1 py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-xl font-bold hover:from-orange-600 hover:to-orange-700 shadow-lg">Masuk</button>
       </div>
     </form>
-
-    <div class="mt-8 text-center text-sm text-gray-500 border-t pt-6">
-      <p class="font-semibold text-orange-600 mb-2">Contoh Login:</p>
-      <p><strong>Admin:</strong> admin / putu2025</p>
-      <p><strong>Pelanggan:</strong> budi / budi123</p>
-      <p><strong>Pelanggan:</strong> sari / sari123</p>
-    </div>
   </div>
 </div>
 
@@ -129,7 +121,7 @@ session_start();
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <h2 class="text-3xl font-bold text-center mb-12 animate__fadeIn">Tentang Kami</h2>
     <div class="text-center text-gray-600 animate__fadeIn" style="animation-delay: 0.3s;">
-      <p class="text-lg mb-4">Selamat datang di Putu Ngaglik Surabaya, tempat di mana cita rasa Nusantara berpadu dengan kehangatan tradisi! Sejak 2010, kami menghidupkan kembali kenangan masa kecil melalui jajanan tradisional seperti kue putu, klepon, dan nagasari yang dibuat dengan cinta. Setiap gigitan adalah perjalanan ke pasar tradisional, dengan aroma pandan segar, gula merah yang lumer, dan kelapa parut yang menggoda. Kami berkomitmen menggunakan bahan lokal terbaik untuk melestarikan warisan kuliner Indonesia, sambil menyajikannya dengan sentuhan modern yang memanjakan lidah Anda. Ayo, rasakan kelezatan yang membawa Anda pulang ke rumah!</p>
+      <p class="text-lg mb-4">Selamat datang di Putu Ngaglik Surabaya, tempat di mana cita rasa Nusantara berpadu dengan kehangatan tradisi! Sejak 1974, kami menghidupkan kembali kenangan masa kecil melalui jajanan tradisional seperti kue putu, klepon, dan nagasari yang dibuat dengan cinta. Setiap gigitan adalah perjalanan ke pasar tradisional, dengan aroma pandan segar, gula merah yang lumer, dan kelapa parut yang menggoda. Kami berkomitmen menggunakan bahan lokal terbaik untuk melestarikan warisan kuliner Indonesia, sambil menyajikannya dengan sentuhan modern yang memanjakan lidah Anda. Ayo, rasakan kelezatan yang membawa Anda pulang ke rumah!</p>
     </div>
   </div>
 </section>
@@ -174,12 +166,6 @@ session_start();
   </div>
 </section>
 
-<section class="py-16 bg-gray-100">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <h2 class="text-3xl font-bold text-center mb-12">Rating Pengguna</h2>
-    <p class="text-center text-lg">⭐⭐⭐⭐☆ (4.5/5 dari 120 ulasan)</p>
-  </div>
-</section>
 
 <footer class="bg-gray-800 text-white py-8">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -189,6 +175,40 @@ session_start();
 
 <!-- JavaScript (SUDAH DIPERBAIKI 100%) -->
 <script>
+// === ANIMASI SCROLL CANTIK — TAMBAHAN SAJA, TIDAK GANGGU YANG LAIN ===
+document.addEventListener("DOMContentLoaded", function () {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animate');
+            }
+        });
+    }, { threshold: 0.1 });
+
+    // Animasi untuk section utama
+    document.querySelectorAll('#home, #about, #menu, #location, #contact').forEach(el => {
+        el.classList.add('opacity-0', 'translate-y-16', 'transition-all', 'duration-1000', 'ease-out');
+        observer.observe(el);
+    });
+
+    // Animasi bertahap untuk setiap card menu
+    document.querySelectorAll('#menuContainer > div').forEach((card, i) => {
+        card.classList.add('opacity-0', 'translate-y-20', 'transition-all', 'duration-1000', 'ease-out');
+        card.style.transitionDelay = `${i * 100}ms`;
+        observer.observe(card);
+    });
+});
+
+// CSS animasi (langsung di JS biar pasti jalan)
+const animCSS = document.createElement('style');
+animCSS.textContent = `
+    .animate { 
+        opacity: 1 !important; 
+        transform: translateY(0) !important; 
+    }
+`;
+document.head.appendChild(animCSS);
+
 // FUNGSI MODAL LOGIN — INI YANG MEMBUAT TOMBOL LOGIN BERFUNGSI
 function openLoginModal() {
     document.getElementById('loginModal').classList.remove('hidden');
@@ -300,34 +320,56 @@ function checkoutWhatsApp() {
 
 // LOAD MENU DARI DATABASE
 fetch('includes/produk.php?action=read')
-.then(r=>r.json())
-.then(data=>{
+.then(r => r.json())
+.then(data => {
     const c = document.getElementById('menuContainer');
-    c.innerHTML='';
-    data.forEach(p=>{
-        const badge = p.bestseller ? '<span class="bg-green-600 text-white text-xs px-3 py-1 rounded-full font-bold">BEST SELLER</span>' 
-                    : p.unik ? '<span class="bg-purple-600 text-white text-xs px-3 py-1 rounded-full font-bold">UNIK</span>' : '';
+    c.innerHTML = '';
+
+    if (data.length === 0) {
+        c.innerHTML = '<p class="text-center col-span-full text-gray-600 text-xl">Belum ada menu.</p>';
+        return;
+    }
+
+    data.forEach(p => {
+        const badge = p.bestseller 
+            ? '<span class="bg-green-600 text-white text-xs px-3 py-1 rounded-full font-bold">BEST SELLER</span>' 
+            : p.unik 
+            ? '<span class="bg-purple-600 text-white text-xs px-3 py-1 rounded-full font-bold">UNIK</span>' 
+            : '';
+
         c.innerHTML += `
-        <div class="bg-white rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition transform hover:-translate-y-3 border border-gray-200">
+        <div class="bg-white rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition transform hover:-translate-y-3 border border-gray-200 flex flex-col h-full">
             <img src="assets/img/${p.gambar}" alt="${p.nama}" class="w-full h-64 object-cover">
-            <div class="p-6">
-                ${badge?'<div class="mb-3">'+badge+'</div>':''}
+            
+            <!-- Bagian isi card — pakai flex-grow biar tombol selalu di bawah -->
+            <div class="p-6 flex flex-col flex-grow">
+                ${badge ? '<div class="mb-3">' + badge + '</div>' : ''}
                 <h3 class="text-2xl font-bold text-gray-800 mb-2">${p.nama}</h3>
-                <p class="text-gray-600 mb-4">${p.deskripsi||'Jajanan tradisional khas Surabaya'}</p>
-                <p class="text-3xl font-bold text-orange-600 mb-6">Rp ${parseInt(p.harga).toLocaleString('id-ID')}/bungkus</p>
-                <button onclick='addToCart("${p.nama}",${p.harga},"${p.gambar}")' 
-                        class="w-full bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold py-4 rounded-xl hover:from-orange-600 hover:to-red-600 transition transform hover:scale-105 shadow-lg">
-                    TAMBAH KE KERANJANG
-                </button>
+                <p class="text-gray-600 text-sm flex-grow">${p.deskripsi || 'Jajanan tradisional khas Surabaya'}</p>
+                
+                <!-- Harga tetap di atas tombol -->
+                <p class="text-3xl font-bold text-orange-600 mb-4">
+                    Rp ${parseInt(p.harga).toLocaleString('id-ID')}/bungkus
+                </p>
+                
+                <!-- Tombol SELALU di paling bawah & rata tinggi semua card -->
+                <div class="mt-auto">
+                    <button onclick='addToCart("${p.nama}", ${p.harga}, "${p.gambar}")' 
+                            class="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold py-4 rounded-xl shadow-lg transition transform hover:scale-105">
+                        TAMBAH KE KERANJANG
+                    </button>
+                </div>
             </div>
         </div>`;
     });
 })
-.catch(()=>{ document.getElementById('menuContainer').innerHTML='<p class="text-center col-span-full text-red-500">Gagal memuat menu.</p>'; });
-
+.catch(() => {
+    document.getElementById('menuContainer').innerHTML = '<p class="text-center col-span-full text-red-500">Gagal memuat menu.</p>';
+});
 // GSAP
 gsap.from(".animate__fadeIn", {opacity:0,y:50,duration:1,stagger:.2,ease:"power2.out"});
 </script>
+
 
 </body>
 </html>
